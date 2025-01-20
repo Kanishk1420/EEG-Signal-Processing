@@ -1,0 +1,445 @@
+import pandas as pd
+df=pd.read_csv('Epileptic Seizure Recognition reaper.csv')
+
+print(df.head(5))
+df=df.drop('Unnamed',axis=1)
+df.head()
+df.loc[df['y'] != 1, 'y'] = 0
+df.head()
+import seaborn as sns
+sns.countplot(data=df, x='y')
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+
+
+# Split the dataset
+X = df.drop('y',axis=1)  # Features
+y = df['y']      # Labels
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model = DecisionTreeClassifier()
+model.fit(X_train, y_train)
+
+# Make predictions
+y_pred = model.predict(X_test)
+
+# Classification Report
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+from sklearn.model_selection import GridSearchCV
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+
+# Define the parameter grid
+param_grid = {
+    'criterion': ['gini', 'entropy'],  # Splitting criterion
+    'max_depth': [None, 5, 10, 20],  # Tree depth
+    'min_samples_split': [2, 5, 10],  # Min samples required to split an internal node
+    'min_samples_leaf': [1, 2, 4]  # Min samples required at a leaf node
+}
+
+# Initialize the Decision Tree Classifier
+dt = DecisionTreeClassifier(random_state=42)
+
+# Perform Grid Search with Cross-Validation
+grid_search = GridSearchCV(estimator=dt, param_grid=param_grid, cv=5, scoring='accuracy', n_jobs=-1, verbose=1)
+grid_search.fit(X_train, y_train)
+
+# Best Hyperparameters
+print("\nBest Parameters Found:")
+print(grid_search.best_params_)
+
+# Evaluate the Tuned Model
+best_model = grid_search.best_estimator_
+y_pred = best_model.predict(X_test)
+
+# Classification Report
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+# Confusion Matrix
+conf_matrix = confusion_matrix(y_test, y_pred)
+
+# Plot Confusion Matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(8, 6))
+sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=np.unique(y), yticklabels=np.unique(y))
+plt.title('Confusion Matrix')
+plt.xlabel('Predicted Labels')
+plt.ylabel('True Labels')
+plt.show()
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import classification_report, confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Define the parameter grid for Random Forest
+param_grid = {
+    'n_estimators': [50, 100, 200],            # Number of trees
+    'max_depth': [None, 10, 20],               # Depth of each tree
+    'min_samples_split': [2, 5, 10],           # Min samples to split an internal node
+    'min_samples_leaf': [1, 2, 4],             # Min samples at a leaf node
+    'max_features': ['sqrt', 'log2', None]     # Number of features to consider when looking for the best split
+}
+
+# Initialize the Random Forest Classifier
+rf = RandomForestClassifier(random_state=42)
+
+# Perform Grid Search with Cross-Validation
+grid_search_rf = GridSearchCV(estimator=rf, param_grid=param_grid, cv=5, scoring='accuracy', n_jobs=-1, verbose=1)
+grid_search_rf.fit(X_train, y_train)
+
+# Best Hyperparameters
+print("\nBest Parameters Found:")
+print(grid_search_rf.best_params_)
+
+# Evaluate the Tuned Model
+best_rf_model = grid_search_rf.best_estimator_
+y_pred = best_rf_model.predict(X_test)
+
+# Classification Report
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+# Confusion Matrix
+conf_matrix = confusion_matrix(y_test, y_pred)
+
+# Plot Confusion Matrix
+plt.figure(figsize=(8, 6))
+sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=np.unique(y), yticklabels=np.unique(y))
+plt.title('Confusion Matrix')
+plt.xlabel('Predicted Labels')
+plt.ylabel('True Labels') 
+plt.show()
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Initialize the Random Forest Classifier with the best parameters
+best_rf_model = RandomForestClassifier(
+    max_depth=None,
+    max_features='log2',
+    min_samples_leaf=4,
+    min_samples_split=10,
+    n_estimators=100,
+    random_state=42
+)
+
+# Train the model on the training set
+best_rf_model.fit(X_train, y_train)
+
+# Make predictions for training and testing data
+y_train_pred = best_rf_model.predict(X_train)
+y_test_pred = best_rf_model.predict(X_test)
+
+# Classification Report for Training Set
+print("\nClassification Report (Training):")
+print(classification_report(y_train, y_train_pred))
+
+# Classification Report for Testing Set
+print("\nClassification Report (Testing):")
+print(classification_report(y_test, y_test_pred))
+
+# Plot Confusion Matrix for Training Set
+conf_matrix_train = confusion_matrix(y_train, y_train_pred)
+plt.figure(figsize=(8, 6))
+sns.heatmap(conf_matrix_train, annot=True, fmt='d', cmap='Blues', xticklabels=np.unique(y), yticklabels=np.unique(y))
+plt.title('Confusion Matrix (Training)')
+plt.xlabel('Predicted Labels')
+plt.ylabel('True Labels')
+plt.show()
+
+# Plot Confusion Matrix for Testing Set
+conf_matrix_test = confusion_matrix(y_test, y_test_pred)
+plt.figure(figsize=(8, 6))
+sns.heatmap(conf_matrix_test, annot=True, fmt='d', cmap='Blues', xticklabels=np.unique(y), yticklabels=np.unique(y))
+plt.title('Confusion Matrix (Testing)')
+plt.xlabel('Predicted Labels')
+plt.ylabel('True Labels')
+plt.show()
+from sklearn.model_selection import StratifiedKFold
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+import numpy as np
+
+# Parameters for the Random Forest model
+rf_model = RandomForestClassifier(
+    max_depth=10,
+    max_features='sqrt',
+    min_samples_leaf=5,
+    min_samples_split=10,
+    n_estimators=200,
+    random_state=42
+)
+
+# Stratified K-Fold Cross Validation
+skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+
+fold_accuracies = []
+fold_reports = []
+
+for fold, (train_idx, test_idx) in enumerate(skf.split(X, y), 1):
+    # Split the data
+    X_train_fold, X_test_fold = X.iloc[train_idx], X.iloc[test_idx]
+    y_train_fold, y_test_fold = y.iloc[train_idx], y.iloc[test_idx]
+
+    # Train the model
+    rf_model.fit(X_train_fold, y_train_fold)
+
+    # Predict on the test fold
+    y_pred_fold = rf_model.predict(X_test_fold)
+
+    # Calculate accuracy for the current fold
+    accuracy = accuracy_score(y_test_fold, y_pred_fold)
+    fold_accuracies.append(accuracy)
+
+    # Generate classification report
+    report = classification_report(y_test_fold, y_pred_fold, output_dict=True)
+    fold_reports.append(report)
+
+    # Print results for this fold
+    print(f"\nFold {fold} - Accuracy: {accuracy:.4f}")
+    print(f"Classification Report for Fold {fold}:")
+    print(classification_report(y_test_fold, y_pred_fold))
+
+# Overall Metrics
+mean_accuracy = np.mean(fold_accuracies)
+std_accuracy = np.std(fold_accuracies)
+
+print("\nOverall Cross-Validation Metrics:")
+print(f"Mean Accuracy: {mean_accuracy:.4f}")
+print(f"Standard Deviation of Accuracy: {std_accuracy:.4f}")
+
+# Plot Fold Accuracies
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(8, 6))
+plt.plot(range(1, 6), fold_accuracies, marker='o', linestyle='--', color='b')
+plt.title('Cross-Validation Fold Accuracies')
+plt.xlabel('Fold')
+plt.ylabel('Accuracy')
+plt.ylim(0, 1)
+plt.grid(True)
+plt.show()
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import classification_report, confusion_matrix
+import tensorflow as tf
+from tensorflow.keras.models import Sequential # type: ignore
+from tensorflow.keras.layers import LSTM, Dense, Dropout # type: ignore
+import matplotlib.pyplot as plt
+
+# Assume `df` is your dataset with the target column 'Stage'
+
+# Data Preparation
+X = df.drop('y', axis=1).values  # Features
+y = pd.get_dummies(df['y']).values  # One-hot encode labels
+
+# Scale the features
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# Reshape for LSTM (samples, timesteps, features)
+X = X.reshape((X.shape[0], 1, X.shape[1]))
+
+# Train-Test Split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Define LSTM Model
+model = Sequential([
+    LSTM(64, input_shape=(X_train.shape[1], X_train.shape[2]), return_sequences=True),
+    Dropout(0.2),
+    LSTM(32),
+    Dropout(0.2),
+    Dense(16, activation='relu'),
+    Dense(y.shape[1], activation='softmax')  # Output layer
+])
+
+# Compile the Model
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Train the Model
+history = model.fit(X_train, y_train, epochs=30, batch_size=32, validation_data=(X_test, y_test), verbose=1)
+
+# Evaluate the Model
+y_pred = model.predict(X_test)
+
+# Convert predictions and true labels to scalar classes
+y_pred_classes = np.argmax(y_pred, axis=1)  # Predicted classes
+y_test_classes = np.argmax(y_test, axis=1)  # True classes
+
+# Classification Report
+print("\nClassification Report:")
+
+print(classification_report(y_test_classes, y_pred_classes, target_names=['0', '1']))
+
+
+# Confusion Matrix
+conf_matrix = confusion_matrix(y_test_classes, y_pred_classes)
+print("\nConfusion Matrix:")
+print(conf_matrix)
+
+# Plot Training and Validation Accuracy
+plt.figure(figsize=(12, 6))
+plt.plot(history.history['accuracy'], label='Training Accuracy')
+plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+plt.title('Model Accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.legend()
+plt.show()
+
+# Plot Training and Validation Loss
+plt.figure(figsize=(12, 6))
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.title('Model Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.show()
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import classification_report, confusion_matrix
+import tensorflow as tf
+from tensorflow.keras.models import Sequential # type: ignore
+from tensorflow.keras.layers import LSTM, Dense, Dropout # type: ignore
+from tensorflow.keras.callbacks import EarlyStopping # type: ignore
+import matplotlib.pyplot as plt
+
+# Assume `df` is your dataset with the target column 'Stage'
+
+# Data Preparation
+X = df.drop('y', axis=1).values  # Features
+y = pd.get_dummies(df['y']).values  # One-hot encode labels
+
+# Scale the features
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# Reshape for LSTM (samples, timesteps, features)
+X = X.reshape((X.shape[0], 1, X.shape[1]))
+
+# Train-Test Split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Define LSTM Model
+model = Sequential([
+    LSTM(64, input_shape=(X_train.shape[1], X_train.shape[2]), return_sequences=True),
+    Dropout(0.2),
+    LSTM(32),
+    Dropout(0.2),
+    Dense(16, activation='relu'),
+    Dense(y.shape[1], activation='softmax')  # Output layer
+])
+
+# Compile the Model
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Define Early Stopping Callback
+early_stopping = EarlyStopping(
+    monitor='val_loss',  # Monitor validation loss
+    patience=5,          # Stop after 5 epochs of no improvement
+    restore_best_weights=True  # Restore weights from the epoch with the best validation loss
+)
+
+# Train the Model with Early Stopping
+history = model.fit(
+    X_train, y_train,
+    epochs=50,  # Maximum epochs
+    batch_size=32,
+    validation_data=(X_test, y_test),
+    callbacks=[early_stopping],  # Include the early stopping callback
+    verbose=1
+)
+
+# Evaluate the Model
+y_pred = model.predict(X_test)
+y_pred_classes = np.argmax(y_pred, axis=1)
+y_test_classes = np.argmax(y_test, axis=1)
+
+# Classification Report
+print("\nClassification Report:")
+print(classification_report(y_test_classes, y_pred_classes, target_names=['0', '1']))
+
+# Confusion Matrix
+conf_matrix = confusion_matrix(y_test_classes, y_pred_classes)
+print("\nConfusion Matrix:")
+print(conf_matrix)
+
+# Plot Training and Validation Accuracy
+plt.figure(figsize=(12, 6))
+plt.plot(history.history['accuracy'], label='Training Accuracy')
+plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+plt.title('Model Accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.legend()
+plt.show()
+
+# Plot Training and Validation Loss
+plt.figure(figsize=(12, 6))
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.title('Model Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.show()
+import joblib
+
+# Save the trained model
+joblib.dump(model, 'eeg_model.joblib')
+print("Model saved as 'eeg_model.joblib'")
+# Save both models in different formats
+# Save the LSTM model (TensorFlow format)
+if hasattr(model, 'save'):
+	model.save('lstm_model.keras', save_format='tf')
+	print("LSTM Model saved as 'lstm_model.keras'")
+else:
+	print("LSTM model not found or not a Keras model")
+
+# Save the Decision Tree model (using joblib)
+if 'best_model' in locals():
+	joblib.dump(best_model, 'decision_tree_model.joblib')
+	print("Decision Tree Model saved as 'decision_tree_model.joblib'")
+else:
+	print("Decision Tree model not found")
+import matplotlib.pyplot as plt
+
+# Plot Training and Validation Accuracy
+plt.figure(figsize=(12, 6))
+plt.plot(history.history['accuracy'], label='Training Accuracy')
+plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+plt.title('Training vs Validation Accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# Plot Training and Validation Loss
+plt.figure(figsize=(12, 6))
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.title('Training vs Validation Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.grid(True)
+plt.show()
