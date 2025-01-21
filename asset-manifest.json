@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Kanishk1420/EEG-Signal-Processing.git/static/css/main.9c54ad8b.css",
+    "main.js": "/Kanishk1420/EEG-Signal-Processing.git/static/js/main.c98c36e4.js",
+    "index.html": "/Kanishk1420/EEG-Signal-Processing.git/index.html",
+    "main.9c54ad8b.css.map": "/Kanishk1420/EEG-Signal-Processing.git/static/css/main.9c54ad8b.css.map",
+    "main.c98c36e4.js.map": "/Kanishk1420/EEG-Signal-Processing.git/static/js/main.c98c36e4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9c54ad8b.css",
+    "static/js/main.c98c36e4.js"
+  ]
+}
