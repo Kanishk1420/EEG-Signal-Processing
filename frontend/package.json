@@ -12,11 +12,12 @@
     "react-scripts": "5.0.1",
     "recharts": "^2.15.0"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "homepage": "https://kanishk1420.github.io/EEG-Signal-Processing",
+    "scripts": {
+      "predeploy": "npm run build",
+      "deploy": "gh-pages -d build",
+      "start": "react-scripts start",
+      "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": [
@@ -41,4 +42,5 @@
     "postcss": "^8.5.1",
     "tailwindcss": "^3.4.17"
   }
+  
 }
