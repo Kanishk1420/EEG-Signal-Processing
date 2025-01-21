@@ -5,7 +5,7 @@ import pandas as pd
 import joblib
 
 app = Flask(__name__)
-CORS(app)
+CORS(app,origins=['https://kanishk1420.github.io'])
 
 model = joblib.load('decision_tree_model.joblib')
 
@@ -32,4 +32,4 @@ def predict():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0')
