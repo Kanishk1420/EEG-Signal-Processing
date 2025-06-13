@@ -12,10 +12,11 @@ import { Card, CardHeader, CardTitle, CardContent } from "../ui/card.jsx";
 import { Sun, Moon } from "lucide-react";
 
 const sampleData = Array.from({ length: 100 }, () => Math.random() * 600 - 300);
+const API_URL = "https://eeg-signal-processing.azurewebsites.net";
 
 const fetchPrediction = async (data) => {
   try {
-    const response = await fetch("http://localhost:5000/predict", {
+    const response = await fetch(`${API_URL}/predict`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ features: data }),
@@ -114,7 +115,7 @@ const EEGForm = () => {
     if (isPlaying) {
       const updateData = async () => {
         try {
-          const response = await fetch("http://localhost:5000/predict", {
+          const response = await fetch(`${API_URL}/predict`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ features: [] }),

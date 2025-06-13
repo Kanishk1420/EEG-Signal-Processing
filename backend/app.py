@@ -5,7 +5,8 @@ import pandas as pd
 import joblib
 
 app = Flask(__name__)
-CORS(app,origins=['https://kanishk1420.github.io'])
+# Update CORS to include both GitHub Pages and localhost
+CORS(app, origins=['https://kanishk1420.github.io', 'http://localhost:3000'])
 
 model = joblib.load('decision_tree_model.joblib')
 

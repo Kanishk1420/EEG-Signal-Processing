@@ -1,0 +1,2 @@
+[configuration]
+gunicorn_cmd_args=--bind=0.0.0.0 --timeout 600
