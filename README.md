@@ -88,7 +88,7 @@ joblib==1.x
    ```bash
    npm start
    ```
-   The application will open in your browser at http://localhost:3000
+   The application will open in your browser at https://kanishk1420.github.io/EEG-Signal-Processing/
 
 ## System Components
 
