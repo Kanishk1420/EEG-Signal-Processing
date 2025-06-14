@@ -1,0 +1,39 @@
+Here's the formatted chat:
+Jan 25, 2025
+9:27 PM - [System] Messages and calls are end-to-end encrypted
+9:15 PM - [~] created group "NEURO-MINI PROJECT"
+9:27 PM - Sanskar A added you
+9:32 PM - You're now an admin
+10:58 PM - +1 (401): Send me PPT for comments
+10:59 PM - +91 98268: Will send soon
+11:11 PM - +91 98268: [Deleted message]
+1:37 AM - +91 98268: [File: Neuron_Simulation_BRIAN.pptx]
+Jan 28, 2025
+7:29 PM - +1 (401): Hello team. My suggestions:
+
+Keep resistance original
+Decrease purkinje cell count to mimic ataxia
+Quantify as discussed
+8:05 PM - +1 (401): Group has 3 people. One works on above task.
+8:06 PM - +1 (401): Another person start complex model. Follow code/instructions. Will share files.
+8:07 PM - +1 (401): [Files: Computational model docs and PPT]
+
+Jan 29, 2025
+1:38 AM - +1 (401): Third person execute code below and explain results
+1:39 AM - +1 (401): [File: DBS electrode model doc]
+5:27 PM - +1 (401): Please respond yes/no
+5:31 PM - +91 98268: Working on it
+5:32 PM - +91 98268: Having classes 8-6 PM today
+5:32 PM - +1 (401): Ok
+5:32 PM - +91 77979: Working on this
+5:33 PM - +1 (401): Ok
+Jan 30, 2025
+9:21 PM - +91 77979: [File: Complex Cerebellar pathway model.pdf]
+9:38 PM - +1 (401): Thanks. Discuss Saturday meeting
+9:39 PM - +1 (401): Hope others working on 2 models
+9:39 PM - +91 98268: Sending soon
+9:40 PM - +1 (401): Find method to quantify Y-axis value
+9:57 PM - Sanskar: Yes sir
+9:58 PM - +1 (401): Thanks
+Jan 31, 2025
+9:56 AM - Added Kanishk Kiit Cse51

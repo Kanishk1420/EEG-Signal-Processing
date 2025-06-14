@@ -12,7 +12,9 @@ import { Card, CardHeader, CardTitle, CardContent } from "../ui/card.jsx";
 import { Sun, Moon } from "lucide-react";
 
 const sampleData = Array.from({ length: 100 }, () => Math.random() * 600 - 300);
-const API_URL = "https://eeg-signal-processing.azurewebsites.net";
+const API_URL = window.location.hostname === "localhost" 
+  ? "http://localhost:5000"
+  : "https://eeg-signal-processing.azurewebsites.net";
 
 const fetchPrediction = async (data) => {
   try {

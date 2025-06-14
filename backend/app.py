@@ -9,14 +9,6 @@ app = Flask(__name__)
 CORS(app, origins=['https://kanishk1420.github.io', 'http://localhost:3000'])
 
 model = joblib.load('decision_tree_model.joblib')
-
-@app.route('/', methods=['GET'])
-def test():
-    return jsonify({
-    'hello': 'world'
-})
-
-
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
@@ -38,6 +30,10 @@ def predict():
     except Exception as e:
         print(f"Error: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
+@app.route('/healthz', methods=['GET'])
+def health_check():
+    return jsonify({"status": "healthy"}), 200
 
 if __name__ == '__main__':
     app.run(debug=False,host='0.0.0.0')
