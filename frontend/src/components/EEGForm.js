@@ -119,60 +119,61 @@ const EEGForm = () => {
     }
   }, [darkMode]);
   useEffect(() => {
-    let interval;
-    if (isPlaying) {
-      const updateData = async () => {
-        try {
-          // Use functional update pattern to avoid dependency on eegData
-          setEegData(prevData => {
-            const newData = [...prevData];
-            if (newData.length > 100) newData.shift();
-            const lastIndex = newData.length > 0 ? newData[newData.length - 1].time + 1 : 0;
-            const dataIndex = lastIndex % sampleData.length;
-            newData.push({
-              time: lastIndex,
-              value: sampleData[dataIndex],
-            });
-            
-            // Process bands after data update (within this function)
-            const dataValues = newData.map(d => d.value);
-            const bands = processBands(dataValues);
-            if (bands) {
-              setBandData(bands);
-            }
-            
-            // Handle prediction (async part moved outside)
-            if (newData.length >= 20 && lastIndex % 5 === 0) {
-              // Store the data we need for prediction
-              setTimeout(() => {
-                fetchPrediction(dataValues.slice(-20))
-                  .then(prediction => {
-                    setSeizureStatus(prediction?.status || "Backend Error");
-                  })
-                  .catch(console.error);
-              }, 0);
-            }
-            
-            return newData;
-          });
-        } catch (error) {
-          console.error("Error in update cycle:", error);
-          if (error.message.includes("Failed to fetch")) {
-            setIsPlaying(false);
-            setSeizureStatus("Backend Error");
-          }
+    let intervalId = null;
+    
+    const updateData = () => {
+      setEegData(prevData => {
+        const newData = [...prevData];
+        if (newData.length > 100) newData.shift();
+        
+        const lastIndex = newData.length > 0 ? newData[newData.length - 1].time + 1 : 0;
+        const dataIndex = lastIndex % sampleData.length;
+        
+        newData.push({
+          time: lastIndex,
+          value: sampleData[dataIndex]
+        });
+        
+        // Process frequency bands
+        const bands = processBands(newData.map(d => d.value));
+        if (bands) {
+          setBandData(bands);
         }
-      };
-
-      interval = setInterval(updateData, speed);
-    }
-
-    return () => {
-      if (interval) clearInterval(interval);
+        
+        // Fetch predictions periodically
+        if (newData.length >= 20 && lastIndex % 5 === 0) {
+          fetchPrediction(newData.map(d => d.value).slice(-20))
+            .then(prediction => {
+              setSeizureStatus(prediction?.status || "Normal");
+            })
+            .catch(error => {
+              console.error("Prediction error:", error);
+              setSeizureStatus("Backend Error");
+            });
+        }
+        
+        return newData;
+      });
     };
-  }, [isPlaying, speed, processBands]); // No need to add eegData now
+    
+    // Properly manage the interval
+    if (isPlaying) {
+      // Initial update to avoid delay
+      updateData();
+      // Set continuous interval
+      intervalId = setInterval(updateData, speed);
+    }
+    
+    // Cleanup function that runs when component unmounts or dependencies change
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [isPlaying, speed, processBands]); // No need for eegData dependency
 
-  // Rest of your component remains the same...
+  const togglePlayback = () => {
+    setIsPlaying(prev => !prev);
+  };
+  
   const handleClear = () => {
     setEegData([]);
     setBandData({
@@ -182,7 +183,6 @@ const EEGForm = () => {
       beta: [],
       gamma: [],
     });
-    setIsPlaying(false);
     setSeizureStatus("No Data");
   };
 
@@ -280,7 +280,7 @@ const EEGForm = () => {
           <div className="flex flex-col items-center gap-4 md:gap-8">
             <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full md:w-auto">
               <button
-                onClick={() => setIsPlaying(!isPlaying)}
+                onClick={togglePlayback}
                 className={`px-6 md:px-8 py-3 rounded-lg font-semibold shadow-lg transition-all transform hover:scale-105 ${
                   isPlaying
                     ? "bg-red-500 hover:bg-red-600"
