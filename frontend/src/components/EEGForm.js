@@ -19,16 +19,22 @@ const API_URL = window.location.hostname === "localhost"
 const fetchPrediction = async (data) => {
   try {
     const response = await fetch(`${API_URL}/predict`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',  // Make sure this is POST
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ features: data }),
     });
-    if (!response.ok) throw new Error("Backend connection failed");
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    
     const result = await response.json();
-    return result.status;
+    return result;
   } catch (error) {
-    console.error("Prediction error:", error);
-    return "Backend Error";
+    console.error("Error fetching prediction:", error);
+    return { error: error.message };
   }
 };
 
