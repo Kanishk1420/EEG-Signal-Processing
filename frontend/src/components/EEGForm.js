@@ -123,33 +123,40 @@ const EEGForm = () => {
     if (isPlaying) {
       const updateData = async () => {
         try {
-          // Only fetch prediction when needed, not on every cycle
-          const newData = [...eegData];
-          if (newData.length > 100) newData.shift();
-          const lastIndex = newData.length > 0 ? newData[newData.length - 1].time + 1 : 0;
-          const dataIndex = lastIndex % sampleData.length;
-          newData.push({
-            time: lastIndex,
-            value: sampleData[dataIndex],
+          // Use functional update pattern to avoid dependency on eegData
+          setEegData(prevData => {
+            const newData = [...prevData];
+            if (newData.length > 100) newData.shift();
+            const lastIndex = newData.length > 0 ? newData[newData.length - 1].time + 1 : 0;
+            const dataIndex = lastIndex % sampleData.length;
+            newData.push({
+              time: lastIndex,
+              value: sampleData[dataIndex],
+            });
+            
+            // Process bands after data update (within this function)
+            const dataValues = newData.map(d => d.value);
+            const bands = processBands(dataValues);
+            if (bands) {
+              setBandData(bands);
+            }
+            
+            // Handle prediction (async part moved outside)
+            if (newData.length >= 20 && lastIndex % 5 === 0) {
+              // Store the data we need for prediction
+              setTimeout(() => {
+                fetchPrediction(dataValues.slice(-20))
+                  .then(prediction => {
+                    setSeizureStatus(prediction?.status || "Backend Error");
+                  })
+                  .catch(console.error);
+              }, 0);
+            }
+            
+            return newData;
           });
-          setEegData(newData);
-          
-          // Process bands after data update
-          const bands = processBands(newData.map((d) => d.value));
-          if (bands) {
-            setBandData(bands);
-          }
-          
-          // Only make API call every ~5 cycles or when we have enough data
-          if (newData.length >= 20 && lastIndex % 5 === 0) {
-            const prediction = await fetchPrediction(
-              newData.slice(-20).map((d) => d.value)
-            );
-            setSeizureStatus(prediction?.status || "Backend Error");
-          }
         } catch (error) {
           console.error("Error in update cycle:", error);
-          // Don't stop playing on every error
           if (error.message.includes("Failed to fetch")) {
             setIsPlaying(false);
             setSeizureStatus("Backend Error");
@@ -163,7 +170,7 @@ const EEGForm = () => {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isPlaying, speed, processBands]);
+  }, [isPlaying, speed, processBands]); // No need to add eegData now
 
   // Rest of your component remains the same...
   const handleClear = () => {
