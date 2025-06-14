@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/EEG-Signal-Processing/static/css/main.9c54ad8b.css",
-    "main.js": "/EEG-Signal-Processing/static/js/main.eef01cdb.js",
+    "main.js": "/EEG-Signal-Processing/static/js/main.35b82a12.js",
     "index.html": "/EEG-Signal-Processing/index.html",
     "main.9c54ad8b.css.map": "/EEG-Signal-Processing/static/css/main.9c54ad8b.css.map",
-    "main.eef01cdb.js.map": "/EEG-Signal-Processing/static/js/main.eef01cdb.js.map"
+    "main.35b82a12.js.map": "/EEG-Signal-Processing/static/js/main.35b82a12.js.map"
   },
   "entrypoints": [
     "static/css/main.9c54ad8b.css",
-    "static/js/main.eef01cdb.js"
+    "static/js/main.35b82a12.js"
   ]
 }
