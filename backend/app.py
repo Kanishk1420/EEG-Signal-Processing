@@ -5,9 +5,17 @@ import pandas as pd
 import joblib
 
 app = Flask(__name__)
-CORS(app,origins=['https://kanishk1420.github.io'])
+# Update CORS to include both GitHub Pages and localhost
+CORS(app, origins=['https://kanishk1420.github.io', 'http://localhost:3000'])
 
 model = joblib.load('decision_tree_model.joblib')
+
+@app.route('/', methods=['GET'])
+def test():
+    return jsonify({
+    'hello': 'world'
+})
+
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -32,4 +40,4 @@ def predict():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0')
+    app.run(debug=False,host='0.0.0.0')
