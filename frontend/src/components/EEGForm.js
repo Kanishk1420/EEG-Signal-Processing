@@ -270,7 +270,7 @@ const EEGForm = () => {
         className={`bg-white dark:bg-gray-800 shadow-2xl rounded-xl transition-colors`}
       >
         <CardHeader className="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 rounded-t-xl p-4 md:p-6 mb-4 md:mb-8">
-          <CardTitle className="text-white text-xl md:text-3xl font-bold font-mono text-center">
+          <CardTitle className="text-white text-xl md:text-3xl font-bold font-serif text-center">
             Real-Time EEG Signal Processing
           </CardTitle>
         </CardHeader>
