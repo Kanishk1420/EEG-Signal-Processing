@@ -14,7 +14,7 @@ import { Sun, Moon } from "lucide-react";
 const sampleData = Array.from({ length: 100 }, () => Math.random() * 600 - 300);
 const API_URL = window.location.hostname === "localhost" 
   ? "http://localhost:5000"
-  : "https://eeg-signal-processing-1.onrender.com";
+  : "https://eeg-signal-processing.azurewebsites.net";
 
 const fetchPrediction = async (data) => {
   try {
